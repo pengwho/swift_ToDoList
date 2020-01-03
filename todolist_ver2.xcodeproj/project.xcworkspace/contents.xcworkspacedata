@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:/Users/alice/Desktop/todolist_ver2/todolist_ver2/icons8-expand-arrow-100-2.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/alice/Desktop/todolist_ver2/todolist_ver2/icons8-expand-arrow-100.png">
+   </FileRef>
+   <FileRef
+      location = "self:">
+   </FileRef>
+</Workspace>
