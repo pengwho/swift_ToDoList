@@ -115,6 +115,9 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HWM-PS-4Ld" userLabel="AddTaskButton">
                                         <rect key="frame" x="325" y="10" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="HWM-PS-4Ld" secondAttribute="height" multiplier="1:1" id="TqZ-x3-oPA"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="39"/>
                                         <state key="normal" title="✛">
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -123,14 +126,26 @@
                                             <segue destination="ms6-Au-o0o" kind="show" identifier="AddItem" id="Kha-V2-h4w"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tHM-Vf-a6z" userLabel="TrashButton">
+                                        <rect key="frame" x="10" y="10" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="tHM-Vf-a6z" secondAttribute="height" multiplier="1:1" id="CaA-hz-GaO"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="icon_trash"/>
+                                        <connections>
+                                            <action selector="deleteMultiCheckTask" destination="7ki-YA-cqF" eventType="touchUpInside" id="Mr6-Ez-Sbv"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="3n6-mz-aOt"/>
                                     <constraint firstItem="HWM-PS-4Ld" firstAttribute="centerY" secondItem="cJF-QL-etu" secondAttribute="centerY" id="5bM-LH-rcZ"/>
                                     <constraint firstItem="HWM-PS-4Ld" firstAttribute="height" secondItem="cJF-QL-etu" secondAttribute="height" constant="-20" id="8ty-8h-UWC"/>
-                                    <constraint firstItem="HWM-PS-4Ld" firstAttribute="width" secondItem="cJF-QL-etu" secondAttribute="height" constant="-20" id="Yfa-VU-aGD"/>
-                                    <constraint firstAttribute="trailing" secondItem="HWM-PS-4Ld" secondAttribute="trailing" constant="10" id="aCJ-WT-6rT"/>
+                                    <constraint firstItem="tHM-Vf-a6z" firstAttribute="leading" secondItem="cJF-QL-etu" secondAttribute="leading" constant="10" id="9xb-YK-Yyj"/>
+                                    <constraint firstItem="tHM-Vf-a6z" firstAttribute="height" secondItem="cJF-QL-etu" secondAttribute="height" constant="-20" id="JHP-ZC-Fmz"/>
+                                    <constraint firstItem="HWM-PS-4Ld" firstAttribute="trailing" secondItem="cJF-QL-etu" secondAttribute="trailing" constant="-10" id="aCJ-WT-6rT"/>
+                                    <constraint firstItem="tHM-Vf-a6z" firstAttribute="centerY" secondItem="cJF-QL-etu" secondAttribute="centerY" id="oBu-YI-HPP"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -154,6 +169,11 @@
                                 <segue destination="sHb-Kc-0cb" kind="show" identifier="GoInfoPage" id="RvK-Qv-Sgd"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Sort" id="7CL-wv-HDJ" userLabel="sortItem">
+                            <connections>
+                                <action selector="sortByPriorityId" destination="7ki-YA-cqF" id="4fA-2e-dAj"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="listTableView" destination="WHm-8D-Ixx" id="H2v-9j-Sa6"/>
@@ -161,7 +181,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CCv-iC-Kgz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1050.7246376811595" y="133.25892857142856"/>
+            <point key="canvasLocation" x="1050.4000000000001" y="132.68365817091455"/>
         </scene>
         <!--Writer View Controller-->
         <scene sceneID="X4c-ao-cRT">
@@ -172,10 +192,52 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mpi-gC-xSv" userLabel="TimeView">
-                                <rect key="frame" x="0.0" y="64" width="375" height="20"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="110"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_transparent" translatesAutoresizingMaskIntoConstraints="NO" id="c1F-XN-sNl" userLabel="showChosenIcon">
+                                        <rect key="frame" x="170" y="5" width="35" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="c1F-XN-sNl" secondAttribute="height" multiplier="1:1" id="Oqb-E3-qgx"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="優先程度" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="32t-V9-sPd" userLabel="showChosenLabel">
+                                        <rect key="frame" x="30" y="45" width="315" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="qg3-vV-2K1"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="gb9-gU-9YE" userLabel="chooseSegment">
+                                        <rect key="frame" x="30" y="72" width="315" height="29"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="aTU-8e-Cle"/>
+                                        </constraints>
+                                        <segments>
+                                            <segment title="None"/>
+                                            <segment title="1"/>
+                                            <segment title="2"/>
+                                            <segment title="3"/>
+                                            <segment title="4"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="segmentChange:" destination="ms6-Au-o0o" eventType="valueChanged" id="DDE-8w-3GS"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="hod-BL-5PL"/>
+                                    <constraint firstItem="gb9-gU-9YE" firstAttribute="leading" secondItem="Mpi-gC-xSv" secondAttribute="leading" constant="30" id="0Id-QG-djp"/>
+                                    <constraint firstItem="gb9-gU-9YE" firstAttribute="trailing" secondItem="Mpi-gC-xSv" secondAttribute="trailing" constant="-30" id="6Zo-t1-3vw"/>
+                                    <constraint firstItem="c1F-XN-sNl" firstAttribute="top" secondItem="Mpi-gC-xSv" secondAttribute="top" constant="5" id="99k-6k-taQ"/>
+                                    <constraint firstItem="32t-V9-sPd" firstAttribute="leading" secondItem="Mpi-gC-xSv" secondAttribute="leading" constant="30" id="Gj1-hX-o1I"/>
+                                    <constraint firstItem="32t-V9-sPd" firstAttribute="trailing" secondItem="Mpi-gC-xSv" secondAttribute="trailing" constant="-30" id="IHm-3w-glk"/>
+                                    <constraint firstItem="c1F-XN-sNl" firstAttribute="bottom" secondItem="32t-V9-sPd" secondAttribute="top" constant="-5" id="Zo6-id-jy9"/>
+                                    <constraint firstItem="gb9-gU-9YE" firstAttribute="bottom" secondItem="Mpi-gC-xSv" secondAttribute="bottom" constant="-10" id="fKw-dY-mwO"/>
+                                    <constraint firstAttribute="height" constant="110" id="hod-BL-5PL"/>
+                                    <constraint firstItem="32t-V9-sPd" firstAttribute="bottom" secondItem="gb9-gU-9YE" secondAttribute="top" constant="-5" id="i1b-nV-GUf"/>
+                                    <constraint firstItem="c1F-XN-sNl" firstAttribute="centerX" secondItem="Mpi-gC-xSv" secondAttribute="centerX" id="nPK-8a-112"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ezg-aj-Nwd" userLabel="ToolBoxView">
@@ -215,7 +277,7 @@
                                 </constraints>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="kHS-Yw-c15">
-                                <rect key="frame" x="10" y="84" width="355" height="523"/>
+                                <rect key="frame" x="10" y="174" width="355" height="433"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -237,8 +299,11 @@
                         <viewLayoutGuide key="safeArea" id="pgy-Ye-Ntf"/>
                     </view>
                     <connections>
+                        <outlet property="ChooseSegment" destination="gb9-gU-9YE" id="UKL-IR-O2R"/>
                         <outlet property="CloseKeyBoardButton" destination="Kow-vI-FUE" id="Nbf-YE-By6"/>
                         <outlet property="EnterButton" destination="zg8-gu-Cil" id="vOL-b3-yfL"/>
+                        <outlet property="ShowChosenIcon" destination="c1F-XN-sNl" id="2aR-KM-Rzn"/>
+                        <outlet property="ShowChosenLabel" destination="32t-V9-sPd" id="L12-tz-EnJ"/>
                         <outlet property="TaskEditTextField" destination="kHS-Yw-c15" id="QbI-Pe-hQ4"/>
                     </connections>
                 </viewController>
@@ -251,9 +316,12 @@
     <resources>
         <image name="icon_done_arrow_black" width="100" height="100"/>
         <image name="icon_info_white" width="100" height="100"/>
+        <image name="icon_transparent" width="24" height="24"/>
+        <image name="icon_trash" width="96" height="96"/>
         <image name="icon_uncheckbox_white" width="100" height="100"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aVm-29-gxm"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
 </document>

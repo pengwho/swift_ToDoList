@@ -19,8 +19,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var taskData: [myTask] = []
     
-    var checkBoxDics: [Bool:UIImage] = [true: UIImage(named: "icon_checkbox_white")!,
+    let checkBoxDics: [Bool:UIImage] = [true: UIImage(named: "icon_checkbox_white")!,
                                         false: UIImage(named: "icon_uncheckbox_white")!]
+    
+    let priorityImageDics: [Int:UIImage] = [0: UIImage(named: "icon_transparent")!,
+                                            1: UIImage(named: "icon_star_blue")!,
+                                            2: UIImage(named: "icon_star_yellow")!,
+                                            3: UIImage(named: "icon_star_orange")!,
+                                            4: UIImage(named: "icon_star_red")!]
     
     struct myTask {
         var isCheck: Bool = false
@@ -48,28 +54,50 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.prepare(for: segue, sender: sender)
         
         switch(segue.identifier ?? "") {
-        case "AddItem":
-            print("adding new task !")
-        case "EditItem":
-            print("Editing some task !")
-            guard let writerVC = segue.destination as? WriterViewController else { return }
-            guard let selectedCell = sender as? ListTableViewCell else { return }
-            guard let indexPath = listTableView.indexPath(for: selectedCell) else { return }
-            let selectedText = taskData[indexPath.row].task
-            writerVC.textSendForVC = selectedText
-            writerVC.textIndexSendForVC = indexPath.row
-        case "GoInfoPage":
-            print("GoInfoPage !")
-        default:
-            fatalError("Unexpected Segue Identifier; \(String(describing: segue.identifier))")
+            case "AddItem":
+                print("adding new task !")
+            case "EditItem":
+                print("Editing some task !")
+                guard let writerVC = segue.destination as? WriterViewController else { return }
+                guard let selectedCell = sender as? ListTableViewCell else { return }
+                guard let indexPath = listTableView.indexPath(for: selectedCell) else { return }
+                
+                writerVC.textSendFormVC = taskData[indexPath.row].task
+                writerVC.priorityIdSendFormVC = taskData[indexPath.row].priorityID
+                writerVC.textIndexSendFormVC = indexPath.row
+            case "GoInfoPage":
+                print("GoInfoPage !")
+            default:
+                fatalError("Unexpected Segue Identifier; \(String(describing: segue.identifier))")
         }
     }
     
     @IBAction func didUnwindFromWriterVC(_ sender: UIStoryboardSegue) {
         if let writerVC = sender.source as? WriterViewController {
             let textMessage: String = writerVC.TaskEditTextField.text
-            addTask(indexPath: writerVC.textIndexSendForVC!, textMessage: textMessage)
+            addTask(indexPath: writerVC.textIndexSendFormVC!, textMessage: textMessage, priorityIndex: writerVC.priorityIdSendFormVC!)
         }
+    }
+    
+    @IBAction func deleteMultiCheckTask() {
+        var i = 0
+        while i < taskData.count {
+            if taskData[i].isCheck {
+                taskData.remove(at: i)
+            } else {
+                i += 1
+            }
+        }
+        saveData()
+        listTableView.reloadData()
+    }
+    
+    @IBAction func sortByPriorityId(){
+        taskData.sort { (s1, s2) -> Bool in
+            return s1.priorityID > s2.priorityID
+        }
+        saveData()
+        listTableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -81,7 +109,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let taskIndexPath = taskData[indexPath.row]
         cell.taskLabel?.text = taskIndexPath.task
         cell.checkButton?.setBackgroundImage(checkBoxDics[taskIndexPath.isCheck], for: UIControl.State.normal)
-        
+        cell.priorityImageView?.image = priorityImageDics[taskIndexPath.priorityID]
         cell.delegate = self
         return cell
     }
@@ -98,19 +126,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    func addTask( indexPath: Int, textMessage: String ) {
+    func addTask( indexPath: Int, textMessage: String, priorityIndex: Int ) {
         if textMessage == "" {
             return
         }
         else {
             if indexPath == -1 {
-                taskData.append(myTask(isCheck: false, priorityID: 0, task: textMessage))
+                taskData.append(myTask(isCheck: false, priorityID: priorityIndex, task: textMessage))
                 saveData()
                 listTableView.reloadData()
                 return
             }
             else {
                 taskData[indexPath].task = textMessage
+                taskData[indexPath].priorityID = priorityIndex
                 saveData()
                 listTableView.reloadData()
                 return
@@ -143,7 +172,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func ListTableViewCellTapCheckBoxButton(_ sender: ListTableViewCell) {
         guard let tappedIndexPath = listTableView.indexPath(for: sender) else { return }
-        // var taskIndexPath = taskData[tappedIndexPath.row]
+        
         if taskData[tappedIndexPath.row].isCheck {
             taskData[tappedIndexPath.row].isCheck = false
         }else {
